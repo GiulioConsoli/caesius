@@ -1,0 +1,41 @@
+---
+// Página de tema. Se genera sólo para los temas con artículos publicados.
+import Base from '../../layouts/Base.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import { analisisPublicados, temasConArticulos } from '../../lib/contenido';
+import { nombreTema } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const temas = await temasConArticulos();
+  return [...temas.keys()].map((tema) => ({ params: { tema } }));
+}
+
+const { tema } = Astro.params;
+const articulos = (await analisisPublicados()).filter((a) => a.data.temas.includes(tema));
+const otros = [...(await temasConArticulos()).keys()].filter((t) => t !== tema);
+---
+
+<Base titulo={nombreTema(tema)} descripcion={`Análisis de Caesius sobre ${nombreTema(tema).toLowerCase()}.`}>
+  <div class="contenedor">
+    <header class="pagina__cabecera">
+      <span class="etiqueta">Tema</span>
+      <h1>{nombreTema(tema)}</h1>
+      <p>{articulos.length} análisis.</p>
+    </header>
+
+    {otros.length > 0 && (
+      <ul class="chips" aria-label="Otros temas">
+        <li><a href={`/temas/${tema}`} aria-current="page">{nombreTema(tema)}</a></li>
+        {otros.map((t) => (
+          <li><a href={`/temas/${t}`}>{nombreTema(t)}</a></li>
+        ))}
+      </ul>
+    )}
+
+    <ul class="rejilla">
+      {articulos.map((a) => (
+        <Tarjeta entrada={a} />
+      ))}
+    </ul>
+  </div>
+</Base>

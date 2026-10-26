@@ -1,0 +1,35 @@
+---
+// Archivo completo de análisis, con filtro por tema.
+import Base from '../../layouts/Base.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import { analisisPublicados, temasConArticulos } from '../../lib/contenido';
+import { nombreTema } from '../../lib/format';
+
+const articulos = await analisisPublicados();
+const temas = [...(await temasConArticulos()).entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<Base titulo="Análisis" descripcion="Todos los análisis de Caesius, del más reciente al más antiguo.">
+  <div class="contenedor">
+    <header class="pagina__cabecera">
+      <h1>Análisis</h1>
+      <p>{articulos.length} {articulos.length === 1 ? 'análisis publicado' : 'análisis publicados'}.</p>
+    </header>
+
+    {temas.length > 1 && (
+      <ul class="chips" aria-label="Filtrar por tema">
+        {temas.map(([slug, n]) => (
+          <li>
+            <a href={`/temas/${slug}`}>{nombreTema(slug)} · {n}</a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <ul class="rejilla">
+      {articulos.map((a) => (
+        <Tarjeta entrada={a} />
+      ))}
+    </ul>
+  </div>
+</Base>
