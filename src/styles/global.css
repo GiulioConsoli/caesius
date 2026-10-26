@@ -5,8 +5,9 @@
    ------------------------------------------------------------------ */
 
 :root {
-  --azul: #1c5bb8;
-  --azul-claro: #e8eef9;
+ --azul: #1c5bb8;
+--azul-claro: #e8eef9;
+--azul-espectral: #56b4d3;
   --tinta: #111214;
   --gris-700: #4a4d52;
   --gris-500: #6f7379;
@@ -172,7 +173,7 @@ p {
   width: 0.9rem;
   height: 1.3rem;
   border-left: 3px solid var(--azul);
-  border-right: 3px solid var(--azul);
+  border-right: 3px solid var(--azul-espectral);
 }
 .nav {
   display: flex;
