@@ -9,6 +9,7 @@ const analisis = defineCollection({
     titulo: z.string(),
     // Dos frases, como máximo. Aparece bajo el título y en las tarjetas.
     sumario: z.string(),
+    idioma: z.enum(['es', 'en']).default('es'),
     // Uno o más autores, en el orden en que deben aparecer.
     autores: z.array(reference('autores')).min(1),
     fecha: z.coerce.date(),
@@ -51,6 +52,7 @@ const autores = defineCollection({
   schema: z.object({
     nombre: z.string(),
     rol: z.string(),
+    idioma: z.enum(['es', 'en']).default('es'),
     // Iniciales para el monograma (p. ej. "GC"). Si hay foto, se usa la foto.
     iniciales: z.string().max(3),
     foto: z.string().optional(),
