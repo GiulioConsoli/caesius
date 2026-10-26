@@ -1,0 +1,52 @@
+---
+// Recuadro "Datos y método" al final de cada artículo.
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  datos: CollectionEntry<'analisis'>['data'];
+}
+
+const { datos } = Astro.props;
+const hayContenido =
+  datos.fuentes.length > 0 || datos.periodo || datos.metodo || datos.repositorio;
+---
+
+{hayContenido && (
+  <aside class="datos" id="datos-y-metodo" aria-labelledby="datos-titulo">
+    <h2 id="datos-titulo">Datos y método</h2>
+    <dl>
+      {datos.fuentes.length > 0 && (
+        <>
+          <dt>Fuentes</dt>
+          <dd>
+            <ul>
+              {datos.fuentes.map((f) => (
+                <li>{f.url ? <a href={f.url} rel="noopener">{f.nombre}</a> : f.nombre}</li>
+              ))}
+            </ul>
+          </dd>
+        </>
+      )}
+      {datos.periodo && (
+        <>
+          <dt>Periodo</dt>
+          <dd>{datos.periodo}</dd>
+        </>
+      )}
+      {datos.metodo && (
+        <>
+          <dt>Método</dt>
+          <dd>{datos.metodo}</dd>
+        </>
+      )}
+      {datos.repositorio && (
+        <>
+          <dt>Código</dt>
+          <dd>
+            <a href={datos.repositorio} rel="noopener">{datos.repositorio.replace(/^https?:\/\//, '')}</a>
+          </dd>
+        </>
+      )}
+    </dl>
+  </aside>
+)}

@@ -1,0 +1,22 @@
+---
+// Nombres de los autores enlazados, separados por comas y "y":
+// "Ana Pérez", "Ana Pérez y Luis Gómez", "Ana Pérez, Luis Gómez y Marta Ruiz".
+import type { Autor } from '../lib/autores';
+
+interface Props {
+  autores: Autor[];
+}
+
+const { autores } = Astro.props;
+const n = autores.length;
+---
+
+<span class="firmas">
+  {autores.map((a, i) => (
+    <>
+      <a href={`/autores/${a.id}`}>{a.data.nombre}</a>
+      {i < n - 2 && ', '}
+      {i === n - 2 && ' y '}
+    </>
+  ))}
+</span>

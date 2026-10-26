@@ -1,0 +1,59 @@
+---
+// Página de autor: biografía (cuerpo del .md), enlaces y sus análisis.
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import { analisisPublicados } from '../../lib/contenido';
+
+export async function getStaticPaths() {
+  const autores = await getCollection('autores');
+  return autores.map((autor) => ({ params: { slug: autor.id }, props: { autor } }));
+}
+
+const { autor } = Astro.props;
+const { Content } = await render(autor);
+const articulos = (await analisisPublicados()).filter((a) => a.data.autores.some((x) => x.id === autor.id));
+---
+
+<Base titulo={autor.data.nombre} descripcion={`${autor.data.nombre}, ${autor.data.rol}. Análisis publicados en Caesius.`}>
+  <div class="contenedor">
+    <header class="pagina__cabecera">
+      <div class="autor-caja" style="border: 0; padding-top: 0; margin-top: 0">
+        <span class="monograma monograma--grande" aria-hidden="true">
+          {autor.data.foto ? <img src={autor.data.foto} alt="" /> : autor.data.iniciales}
+        </span>
+        <div>
+          <h1 style="margin: 0">{autor.data.nombre}</h1>
+          <p>{autor.data.rol}</p>
+        </div>
+      </div>
+      <div class="prosa">
+        <Content />
+      </div>
+      {autor.data.enlaces.length > 0 && (
+        <p class="compartir" style="margin-top: 1rem">
+          {autor.data.enlaces.map((e) => (
+            <a href={e.url} rel="noopener me">{e.etiqueta}</a>
+          ))}
+        </p>
+      )}
+    </header>
+
+    <div class="separador" role="presentation"></div>
+
+    <section aria-labelledby="analisis-autor">
+      <div class="seccion__cabecera">
+        <h2 id="analisis-autor">Análisis</h2>
+      </div>
+      {articulos.length > 0 ? (
+        <ul class="rejilla">
+          {articulos.map((a) => (
+            <Tarjeta entrada={a} />
+          ))}
+        </ul>
+      ) : (
+        <p style="color: var(--gris-500)">Todavía sin análisis publicados.</p>
+      )}
+    </section>
+  </div>
+</Base>

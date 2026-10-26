@@ -1,0 +1,25 @@
+---
+// Tarjeta de artículo, sólo texto: tema, título, sumario, autores y fecha.
+import type { CollectionEntry } from 'astro:content';
+import Firmas from './Firmas.astro';
+import { autoresDe } from '../lib/autores';
+import { formatearFecha, fechaISO, nombreTema } from '../lib/format';
+
+interface Props {
+  entrada: CollectionEntry<'analisis'>;
+}
+
+const { entrada } = Astro.props;
+const autores = await autoresDe(entrada);
+const temaPrincipal = entrada.data.temas[0];
+---
+
+<li class="tarjeta">
+  <a class="etiqueta" href={`/temas/${temaPrincipal}`}>{nombreTema(temaPrincipal)}</a>
+  <h3><a href={`/analisis/${entrada.id}`}>{entrada.data.titulo}</a></h3>
+  <p>{entrada.data.sumario}</p>
+  <div class="firma">
+    <Firmas autores={autores} />
+    <time datetime={fechaISO(entrada.data.fecha)}>{formatearFecha(entrada.data.fecha, 'corta')}</time>
+  </div>
+</li>

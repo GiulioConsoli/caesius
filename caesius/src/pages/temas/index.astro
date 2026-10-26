@@ -1,0 +1,28 @@
+---
+// Índice de temas: sólo los que tienen al menos un análisis publicado.
+import Base from '../../layouts/Base.astro';
+import { temasConArticulos } from '../../lib/contenido';
+import { nombreTema } from '../../lib/format';
+
+const temas = [...(await temasConArticulos()).entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<Base titulo="Temas" descripcion="Los análisis de Caesius, agrupados por tema.">
+  <div class="contenedor">
+    <header class="pagina__cabecera">
+      <h1>Temas</h1>
+    </header>
+    <ul class="lista">
+      {temas.map(([slug, n]) => (
+        <li>
+          <h2 style="font-size: var(--t-md); margin: 0">
+            <a href={`/temas/${slug}`}>{nombreTema(slug)}</a>
+          </h2>
+          <span class="mono" style="color: var(--gris-500)">
+            {n} análisis
+          </span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>

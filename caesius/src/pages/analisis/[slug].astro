@@ -1,0 +1,150 @@
+---
+// Página de artículo. Se genera una por cada archivo en src/content/analisis/.
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Figura from '../../components/Figura.astro';
+import DatosMetodo from '../../components/DatosMetodo.astro';
+import Tarjeta from '../../components/Tarjeta.astro';
+import Firmas from '../../components/Firmas.astro';
+import { autoresDe } from '../../lib/autores';
+import { analisisPublicados } from '../../lib/contenido';
+import { formatearFecha, fechaISO, nombreTema, tiempoLectura } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const articulos = await analisisPublicados();
+  return articulos.map((entrada) => ({ params: { slug: entrada.id }, props: { entrada } }));
+}
+
+const { entrada } = Astro.props;
+const { data } = entrada;
+const { Content } = await render(entrada);
+const autores = await autoresDe(entrada);
+
+// Relacionados: mismo tema principal, excluido el propio artículo.
+const relacionados = (await analisisPublicados())
+  .filter((a) => a.id !== entrada.id && a.data.temas.some((t) => data.temas.includes(t)))
+  .slice(0, 3);
+
+const url = new URL(Astro.url.pathname, Astro.site).toString();
+const textoCompartir = encodeURIComponent(`${data.titulo} — Caesius`);
+---
+
+<Base
+  titulo={data.titulo}
+  descripcion={data.sumario}
+  imagen={data.figura.src}
+  tipo="article"
+  fechaPublicacion={data.fecha}
+  plotly={!!data.figura.interactiva}
+>
+  <article class="contenedor">
+    <header class="articulo__cabecera">
+      <div class="firma">
+        {data.temas.map((t) => (
+          <a class="etiqueta" href={`/temas/${t}`}>{nombreTema(t)}</a>
+        ))}
+        <span class="lectura">{tiempoLectura(entrada.body)} min de lectura</span>
+      </div>
+      <h1>{data.titulo}</h1>
+      <p class="articulo__sumario">{data.sumario}</p>
+      <div class="articulo__meta firma">
+        <span class="monogramas" aria-hidden="true">
+          {autores.map((autor) => (
+            <span class="monograma">
+              {autor.data.foto ? <img src={autor.data.foto} alt="" /> : autor.data.iniciales}
+            </span>
+          ))}
+        </span>
+        <Firmas autores={autores} />
+        <time datetime={fechaISO(data.fecha)}>{formatearFecha(data.fecha)}</time>
+        {data.actualizado && (
+          <span class="lectura">actualizado el {formatearFecha(data.actualizado, 'corta')}</span>
+        )}
+        <a href="#datos-y-metodo" class="lectura">Datos y método ↓</a>
+      </div>
+    </header>
+
+    <Figura
+      src={data.figura.src}
+      alt={data.figura.alt}
+      pie={data.figura.pie}
+      interactiva={data.figura.interactiva}
+    />
+
+    <div class="prosa">
+      <Content />
+    </div>
+
+    <DatosMetodo datos={data} />
+
+    <footer>
+      <div class="compartir" aria-label="Compartir">
+        <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${textoCompartir}`} rel="noopener">X</a>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} rel="noopener">LinkedIn</a>
+        <button type="button" class="copiar-enlace" data-url={url}>Copiar enlace</button>
+      </div>
+
+      {autores.map((autor) => (
+        <div class="autor-caja">
+          <span class="monograma monograma--grande" aria-hidden="true">
+            {autor.data.foto ? <img src={autor.data.foto} alt="" /> : autor.data.iniciales}
+          </span>
+          <div>
+            <strong><a href={`/autores/${autor.id}`}>{autor.data.nombre}</a></strong>
+            <p>{autor.data.rol}</p>
+          </div>
+        </div>
+      ))}
+
+      {relacionados.length > 0 && (
+        <section aria-labelledby="relacionados">
+          <div class="separador" role="presentation"></div>
+          <div class="seccion__cabecera">
+            <h2 id="relacionados">Relacionados</h2>
+          </div>
+          <ul class="rejilla">
+            {relacionados.map((a) => (
+              <Tarjeta entrada={a} />
+            ))}
+          </ul>
+        </section>
+      )}
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .monogramas {
+    display: inline-flex;
+  }
+  .monogramas .monograma + .monograma {
+    margin-left: -0.5rem;
+  }
+  .copiar-enlace {
+    font: inherit;
+    color: var(--azul);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .copiar-enlace:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  // Copia la URL del artículo al portapapeles.
+  document.querySelectorAll<HTMLButtonElement>('.copiar-enlace').forEach((boton) => {
+    boton.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(boton.dataset.url ?? location.href);
+        const original = boton.textContent;
+        boton.textContent = 'Enlace copiado';
+        setTimeout(() => (boton.textContent = original), 2000);
+      } catch {
+        boton.textContent = 'No se pudo copiar';
+      }
+    });
+  });
+</script>

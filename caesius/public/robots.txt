@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://caesius.es/sitemap-index.xml
