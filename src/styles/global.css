@@ -724,3 +724,61 @@ p {
     font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
   }
 }
+
+/* ---------- Revisione editoriale: metadati e figure ---------- */
+
+.mono,
+.etiqueta,
+.firma time,
+.firma .lectura,
+.apertura__figura figcaption,
+.figura figcaption,
+.seccion__cabecera a,
+.prosa th,
+.monograma,
+.compartir,
+.chips a {
+  font-family: var(--sans);
+}
+
+.firma time,
+.firma .lectura,
+.apertura__figura figcaption,
+.figura figcaption,
+.seccion__cabecera a {
+  font-size: var(--t-sm);
+}
+
+.apertura__figura figcaption,
+.figura figcaption {
+  line-height: 1.5;
+}
+
+.etiqueta {
+  letter-spacing: 0.06em;
+}
+
+.figura--principal {
+  max-width: var(--medida);
+  margin: 2rem 0 2.5rem;
+}
+
+.figura img {
+  width: 100%;
+  height: auto;
+}
+
+.figura__interactiva {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+@media (min-width: 60rem) {
+  .apertura {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .apertura__texto h1 {
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  }
+}
