@@ -27,10 +27,38 @@ const relacionados = (await analisisPublicados())
 
 const url = new URL(Astro.url.pathname, Astro.site).toString();
 const textoCompartir = encodeURIComponent(`${data.titulo} — Caesius`);
+const datosEstructurados = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: data.titulo,
+  description: data.sumario,
+  image: [new URL(data.figura.src, Astro.site).toString()],
+  datePublished: data.fecha.toISOString(),
+  ...(data.actualizado && {
+    dateModified: data.actualizado.toISOString(),
+  }),
+  inLanguage: 'es',
+  isAccessibleForFree: true,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url,
+  },
+  author: autores.map((autor) => ({
+    '@type': 'Person',
+    name: autor.data.nombre,
+    url: new URL(`/autores/${autor.id}/`, Astro.site).toString(),
+  })),
+  publisher: {
+    '@type': 'Organization',
+    name: 'Caesius',
+    url: Astro.site?.toString(),
+  },
+  keywords: data.temas.map(nombreTema).join(', '),
+};
 ---
 
 <Base
-  titulo={data.titulo}
+  titulo={data.tituloSeo ?? data.titulo}
   descripcion={data.sumario}
   imagen={data.figura.src}
   tipo="article"
@@ -39,6 +67,11 @@ const textoCompartir = encodeURIComponent(`${data.titulo} — Caesius`);
   plotly={!!data.figura.interactiva}
 >
   <article class="contenedor">
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(datosEstructurados)}
+/>
     <header class="articulo__cabecera">
       <div class="firma">
         {data.temas.map((t) => (
