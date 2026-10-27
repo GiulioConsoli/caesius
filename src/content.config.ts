@@ -7,6 +7,7 @@ const analisis = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/analisis' }),
   schema: z.object({
     titulo: z.string(),
+    tituloSeo: z.string().optional(),
     // Dos frases, como máximo. Aparece bajo el título y en las tarjetas.
     sumario: z.string(),
     idioma: z.enum(['es', 'en']).default('es'),
@@ -42,6 +43,7 @@ const analisis = defineCollection({
     repositorio: z.string().url().optional(),
     // true = no se publica (ni en índices, ni en RSS, ni en el sitemap).
     borrador: z.boolean().default(false),
+    noindex: z.boolean().default(false),
   }),
 });
 
