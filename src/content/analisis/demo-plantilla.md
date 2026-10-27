@@ -3,6 +3,7 @@ titulo: "Artículo de demostración: así se ve un análisis en Caesius"
 sumario: "Esta página existe sólo para comprobar la plantilla antes del primer análisis real. Se borra con el archivo src/content/analisis/demo-plantilla.md."
 autores: [giulio-consoli]
 fecha: 2026-10-26
+noindex: true
 temas: [elecciones]
 figura:
   src: /figuras/demo/serie.svg
