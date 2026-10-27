@@ -1,5 +1,6 @@
 ---
 titulo: "Bulgaria antes de la segunda vuelta: lo que dice el mapa y lo que no"
+tituloSeo: "Elecciones Bulgaria 2026: el mapa antes de la segunda vuelta"
 sumario: "Primera vuelta del 25 de octubre en 31 colegios y 28 provincias: geografía del voto, voto válido respecto a 2021 y la aritmética del 1 de noviembre."
 autores: [giulio-consoli]
 fecha: 2026-10-27
