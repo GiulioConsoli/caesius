@@ -3,7 +3,7 @@ import rss from '@astrojs/rss';
 import { analisisPublicados } from '../lib/contenido';
 
 export async function GET(context) {
-  const articulos = await analisisPublicados();
+  const articulos = (await analisisPublicados()).filter((a) => !a.data.noindex);
   return rss({
     title: 'Caesius',
     description: 'Análisis cuantitativos sobre política, economía y sociedad.',
