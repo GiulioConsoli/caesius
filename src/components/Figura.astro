@@ -1,14 +1,7 @@
+
 ---
-// Figura principal de un artículo. La usa la plantilla del artículo, no el
-// Markdown: dentro del cuerpo de un .md las figuras van como HTML estándar
-// (<figure><img …><figcaption>…</figcaption></figure>).
-//
-// `src`: imagen estática en public/ (SVG o PNG). Es lo que ven los lectores
-//        sin JavaScript, los buscadores y las vistas previas en redes.
-// `interactiva`: nombre (sin extensión) de un archivo en src/figuras/
-//        exportado desde Python con
-//        fig.write_html("nombre.html", include_plotlyjs=False, full_html=False)
-//        Con JavaScript, sustituye a la imagen.
+// Figura principal de los artículos de CAESIUS.
+
 interface Props {
   src: string;
   alt: string;
@@ -25,18 +18,96 @@ const interactivas = import.meta.glob('/src/figuras/*.html', {
 }) as Record<string, string>;
 
 let html: string | undefined;
+
 if (interactiva) {
   html = interactivas[`/src/figuras/${interactiva}.html`];
+
   if (!html) {
-    throw new Error(`Figura interactiva no encontrada: src/figuras/${interactiva}.html`);
+    throw new Error(
+      `Figura interactiva no encontrada: src/figuras/${interactiva}.html`
+    );
   }
 }
 ---
 
-<figure class:list={['figura', 'figura--principal', { 'figura--interactiva': !!html }]}>
+<figure
+  class:list={[
+    'figura',
+    'figura--principal',
+    { 'figura--interactiva': !!html }
+  ]}
+>
   <div class="figura__estatica">
-    <img src={src} alt={alt} loading="eager" decoding="async" />
+    <img
+      src={src}
+      alt={alt}
+      loading="eager"
+      decoding="async"
+    />
   </div>
-  {html && <div class="figura__interactiva" set:html={html} />}
-  {pie && <figcaption>{pie}</figcaption>}
+
+  {html && (
+    <div
+      class="figura__interactiva"
+      set:html={html}
+    />
+  )}
+
+  {pie && (
+    <figcaption>{pie}</figcaption>
+  )}
 </figure>
+
+<style>
+  .figura {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .figura__estatica {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #ffffff;
+  }
+
+  .figura__estatica img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .figura__interactiva {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    border-radius: 12px;
+    background: #ffffff;
+  }
+
+  .figura figcaption {
+    margin-top: 12px;
+    padding: 0 2px;
+
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #a8a8a8;
+  }
+
+  @media (max-width: 700px) {
+    .figura__estatica,
+    .figura__interactiva {
+      border-radius: 8px;
+    }
+
+    .figura figcaption {
+      font-size: 11px;
+    }
+  }
+</style>

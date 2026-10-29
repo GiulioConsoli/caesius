@@ -5,11 +5,12 @@ sumario: "Primera vuelta del 25 de octubre en 31 colegios y 28 provincias: geogr
 autores: [giulio-consoli]
 fecha: 2026-10-27
 temas: [elecciones, internacional]
+portada: "/oct1.png"
 borrador: false
-figura: {src: "/figuras/bulgaria-antes-segunda-vuelta-2026/figura-1.png", alt: "Mapa de Bulgaria por provincias con la ventaja de Gyurov sobre Yotova en puntos porcentuales.", pie: "Figura 1. Ventaja de Gyurov sobre Yotova, en puntos porcentuales. Sofía capital suma los colegios 23, 24 y 25; el resto excluye el extranjero. Fuente: CIK, corte del 26 de octubre a las 15:00, 100 % de protocolos procesados. Válidos incluida NOTA; datos provisionales."}
-fuentes: [{nombre: "Comisión Electoral Central de Bulgaria (CIK)", url: "https://results.cik.bg/pvr202610/rezultati/index.html"}, {nombre: "Instituto Nacional de Estadística de Bulgaria (NSI)", url: "https://www.nsi.bg/en"}]
-periodo: "2021–2026"
-metodo: "Resultados electorales agregados por colegio y provincia. Correlaciones descriptivas con el mismo peso para cada provincia; válidos incluida NOTA y extranjero excluido de los mapas y correlaciones."
+figura:
+  src: "/figuras/bulgaria-antes-segunda-vuelta-2026/figura-1.png"
+  alt: "Mapa de Bulgaria por provincias con la ventaja de Gyurov sobre Yotova en puntos porcentuales."
+  pie: "Figura 1. Ventaja de Gyurov sobre Yotova, en puntos porcentuales."
 ---
 
 Bulgaria elige presidente el 1 de noviembre entre Iliana Yotova, presidenta en ejercicio desde enero, y Andrey Gyurov, primer ministro interino entre febrero y mayo. El Gobierno lo encabeza desde entonces Rumen Radev, con quien Yotova ganó la presidencia en 2021. La primera vuelta del 25 de octubre dejó a Yotova 2,81 puntos y 42.715 votos por delante. La distancia es corta; el mapa que la produce no lo es. Gyurov gana la capital por 24,65 puntos y pierde el resto del país por 14,09, y Sofía reúne uno de cada cuatro votos válidos emitidos en Bulgaria.

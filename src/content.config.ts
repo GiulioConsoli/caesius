@@ -16,6 +16,8 @@ const analisis = defineCollection({
     fecha: z.coerce.date(),
     actualizado: z.coerce.date().optional(),
     temas: z.array(z.string()).min(1),
+    // Imagen de portada para las tarjetas de inicio.
+    portada: z.string().optional(),
     // Figura principal.
     //   src: imagen estática en public/figuras/ (ruta absoluta desde /).
     //   interactiva: nombre (sin extensión) de un archivo en src/figuras/

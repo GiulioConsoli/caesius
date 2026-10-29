@@ -1,16 +1,11 @@
+
 ---
-// Cabecera del sitio: logotipo y menú de un solo nivel.
-// "Manifiesto" y "Colabora" se añaden al menú cuando existan sus textos:
-// basta con crear la página en src/pages/ y descomentar la línea.
 const ruta = Astro.url.pathname;
 
 const menu = [
   { texto: 'Análisis', href: '/analisis' },
-  { texto: 'Elecciones', href: '/temas/elecciones' },
   { texto: 'Temas', href: '/temas' },
   { texto: 'Autores', href: '/autores' },
-  // { texto: 'Manifiesto', href: '/manifiesto' },
-  // { texto: 'Colabora', href: '/colabora' },
 ];
 
 function activo(href: string): boolean {
@@ -18,18 +13,261 @@ function activo(href: string): boolean {
 }
 ---
 
-<header class="cabecera">
-  <div class="contenedor cabecera__fila">
-    <a class="logo" href="/" aria-label="Caesius, portada">
-      <span class="logo__marca" aria-hidden="true"></span>
-      <span>Caesius</span>
+<header class="cabecera-flotante">
+  <nav class="navbar" aria-label="Navegación principal">
+    <a class="navbar__logo" href="/" aria-label="Caesius, inicio">
+      <img
+        src="/Caesius.svg"
+        alt="Caesius"
+        class="navbar__logo-img"
+        width="150"
+        height="40"
+      />
     </a>
-    <nav class="nav" aria-label="Secciones">
+
+
+    <div class="navbar__enlaces">
       {menu.map((item) => (
-        <a href={item.href} aria-current={activo(item.href) ? 'page' : undefined}>
+        <a
+          href={item.href}
+          class:activo={activo(item.href)}
+          aria-current={activo(item.href) ? 'page' : undefined}
+        >
           {item.texto}
         </a>
       ))}
-    </nav>
-  </div>
+    </div>
+
+    <a class="navbar__boton" href="/autores">
+      Quiero participar <span aria-hidden="true">↗</span>
+    </a>
+  </nav>
 </header>
+
+<style>
+  .cabecera-flotante {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+    font-weight: 500;
+    font-size: 15px;
+    
+  }
+
+  .navbar {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+
+    width: fit-content;
+    max-width: calc(100% - 24px);
+    min-height: 68px;
+    padding: 9px 14px 9px 24px;
+
+    background: #050505;
+    border: none;
+    border-radius: 0 0 18px 18px;
+
+    box-shadow:
+      0 12px 32px rgba(0, 0, 0, .38),
+      0 0 28px rgba(80, 95, 255, .18),
+      0 0 42px rgba(0, 180, 232, .09);
+  }
+
+  /* Destello suave detrás del menú */
+  .navbar::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -5px;
+    border-radius: 22px;
+
+    background: linear-gradient(
+      105deg,
+      rgba(80, 95, 255, .10) 0%,
+      rgba(80, 95, 255, .40) 30%,
+      rgba(0, 180, 232, .28) 65%,
+      rgba(129, 151, 255, .12) 100%
+    );
+
+    filter: blur(12px);
+    opacity: .85;
+    pointer-events: none;
+  }
+  .navbar__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -.045em;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .navbar__marca {
+    width: 11px;
+    height: 21px;
+    border-left: 3px solid #505fff;
+    border-right: 3px solid #00b4e8;
+    border-radius: 2px;
+  }
+
+  .navbar__enlaces {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+
+  .navbar__enlaces a {
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #e5e5e5;
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+
+  .navbar__enlaces a:hover {
+    color: #ffffff;
+    background: #222222;
+  }
+
+  .navbar__enlaces a.activo {
+    color: #ffffff;
+    background: #292929;
+  }
+
+  .navbar__boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 11px 17px;
+    border-radius: 10px;
+    background: #f5f5f3;
+    color: #111111;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background .2s, transform .2s;
+  }
+
+  .navbar__boton:hover {
+    background: #e1fcfa;
+    transform: translateY(-1px);
+  }
+
+
+@media (max-width: 900px) {
+  .navbar {
+    gap: 16px;
+    padding: 9px 12px 9px 18px;
+  }
+
+  .navbar__logo-img {
+    width: 125px;
+    height: 36px;
+  }
+
+  .navbar__enlaces {
+    gap: 0;
+  }
+
+  .navbar__enlaces a {
+    padding: 9px 8px;
+    font-size: 13px;
+  }
+
+  .navbar__boton {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 700px) {
+  .cabecera-flotante {
+    padding: 0 12px;
+  }
+
+  .navbar {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  .navbar__logo {
+    margin-right: auto;
+  }
+
+  .navbar__logo-img {
+    width: 115px;
+    height: 34px;
+  }
+
+  .navbar__boton {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .navbar__enlaces {
+    order: 3;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    gap: 4px;
+  }
+
+  .navbar__enlaces a {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .navbar__logo-img {
+    width: 95px;
+  }
+
+  .navbar__boton {
+    padding: 9px;
+    font-size: 11px;
+  }
+
+  .navbar__enlaces a {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+}
+
+
+  @media (prefers-reduced-motion: reduce) {
+    .navbar a {
+      transition: none;
+    }
+  }
+</style>

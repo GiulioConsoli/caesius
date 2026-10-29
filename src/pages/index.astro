@@ -1,67 +1,804 @@
+
 ---
-// Portada: pieza de apertura con su figura, rejilla de los últimos análisis.
 import Base from '../layouts/Base.astro';
-import Tarjeta from '../components/Tarjeta.astro';
-import Firmas from '../components/Firmas.astro';
-import { autoresDe } from '../lib/autores';
 import { analisisPublicados } from '../lib/contenido';
-import { formatearFecha, fechaISO, nombreTema, tiempoLectura } from '../lib/format';
+import { fechaISO, nombreTema } from '../lib/format';
+import { autoresDe } from '../lib/autores';
 
 const articulos = await analisisPublicados();
-const apertura = articulos[0];
-const resto = articulos.slice(1, 10);
-const autoresApertura = apertura ? await autoresDe(apertura) : [];
+const articulosConAutores = await Promise.all(
+  articulos.map(async (articulo) => ({
+    articulo,
+    autores: await autoresDe(articulo)
+  }))
+);
+
+const temas = [
+  ...new Set(
+    articulos.flatMap((articulo) => articulo.data.temas)
+  )
+];
+
+const formatearMes = (fecha: string | Date) => {
+  const fechaObjeto = new Date(fecha);
+
+  return new Intl.DateTimeFormat('es-ES', {
+    month: 'short',
+    year: 'numeric'
+  }).format(fechaObjeto);
+};
 ---
 
 <Base
   titulo="Caesius"
-  descripcion="Análisis cuantitativos breves y largos sobre política, economía y sociedad, con los datos y el código a la vista."
-  imagen={apertura?.data.figura.src}
+  descripcion="Nos hacemos preguntas sobre lo que pasa a nuestro alrededor. Exploramos datos, investigamos y contamos lo que encontramos."
+  imagen={articulos[0]?.data.figura.src}
 >
-  <div class="contenedor">
-    {apertura ? (
-      <section class="apertura" aria-label="Análisis destacado">
-        <div class="apertura__texto">
-          <a class="etiqueta" href={`/temas/${apertura.data.temas[0]}`}>
-            {nombreTema(apertura.data.temas[0])}
-          </a>
-          <h1><a href={`/analisis/${apertura.id}`} style="color: inherit">{apertura.data.titulo}</a></h1>
-          <p class="apertura__sumario">{apertura.data.sumario}</p>
-          <div class="firma">
-            <Firmas autores={autoresApertura} />
-            <time datetime={fechaISO(apertura.data.fecha)}>{formatearFecha(apertura.data.fecha)}</time>
-            <span class="lectura">{tiempoLectura(apertura.body)} min</span>
-          </div>
-        </div>
-        <figure class="apertura__figura">
-          <a href={`/analisis/${apertura.id}`}>
-            <img src={apertura.data.figura.src} alt={apertura.data.figura.alt} loading="eager" />
-          </a>
-          {apertura.data.figura.pie && <figcaption>{apertura.data.figura.pie}</figcaption>}
-        </figure>
-      </section>
-    ) : (
-      <section class="pagina__cabecera">
-        <h1>Caesius</h1>
-        <p>Todavía no hay análisis publicados.</p>
-      </section>
-    )}
+  <div class="caesius-home">
+    <div class="contenido">
 
-    {resto.length > 0 && (
-      <>
-        <div class="separador" role="presentation"></div>
-        <section aria-labelledby="ultimos">
-          <div class="seccion__cabecera">
-            <h2 id="ultimos">Últimos análisis</h2>
-            <a href="/analisis">Ver todos →</a>
-          </div>
-          <ul class="rejilla">
-            {resto.map((a) => (
-              <Tarjeta entrada={a} />
+      <!-- HERO -->
+      <header class="intro">
+        <h1>
+          <span class="intro__linea">¿Y si los números</span>
+          <span class="intro__linea">
+            cuentan <span class="intro__destacado">otra historia?</span>
+          </span>
+        </h1>
+
+        <p class="intro__subtitulo">
+          Hay preguntas que merecen más que una opinión.
+        </p>
+      </header>
+
+      <!-- PUBLICACIONES -->
+      <section
+        class="publicaciones"
+        aria-label="Investigaciones"
+      >
+        <!-- FILTROS -->
+        <div class="herramientas">
+          <label class="sr-only" for="filtro-tema">
+            Filtrar por tema
+          </label>
+
+          <select id="filtro-tema">
+            <option value="">
+              Todas las categorías
+            </option>
+
+            {temas.map((tema) => (
+              <option value={tema}>
+                {nombreTema(tema)}
+              </option>
             ))}
-          </ul>
-        </section>
-      </>
-    )}
+          </select>
+
+          <label class="sr-only" for="buscar">
+            Buscar investigaciones
+          </label>
+
+          <input
+            id="buscar"
+            type="search"
+            placeholder="Buscar historias..."
+          />
+        </div>
+
+        <!-- TARJETAS -->
+        <div
+          class="rejilla-editorial"
+          id="rejilla-articulos"
+        >
+          {articulosConAutores.map(({ articulo, autores }, indice) => (
+            <article
+              class="tarjeta-editorial"
+              data-temas={articulo.data.temas.join('|')}
+              data-busqueda={`${articulo.data.titulo} ${articulo.data.sumario}`.toLocaleLowerCase('es')}
+              hidden={indice >= 9}
+            >
+              <!-- IMAGEN 1:1 -->
+              <a
+                class="tarjeta-editorial__imagen"
+                href={`/analisis/${articulo.id}`}
+                aria-label={`Leer: ${articulo.data.titulo}`}
+              >
+                <img
+                  src={articulo.data.portada ?? articulo.data.figura.src}
+                  alt={articulo.data.figura.alt}
+                  loading={indice < 3 ? 'eager' : 'lazy'}
+                />
+              </a>
+
+              <!-- CONTENIDO -->
+              <div class="tarjeta-editorial__cuerpo">
+
+                <!-- ETIQUETA Y FECHA -->
+                <div class="tarjeta-editorial__meta">
+                  <span class="tarjeta-editorial__etiqueta">
+                    {nombreTema(articulo.data.temas[0])}
+                  </span>
+
+                  <time datetime={fechaISO(articulo.data.fecha)}>
+                    {formatearMes(articulo.data.fecha)}
+                  </time>
+                </div>
+
+                <!-- TÍTULO -->
+                <h2>
+                  <a href={`/analisis/${articulo.id}`}>
+                    {articulo.data.titulo}
+                  </a>
+                </h2>
+
+                <!-- AUTOR Y FLECHA -->
+                <div class="tarjeta-editorial__pie">
+
+                  <span class="tarjeta-editorial__autor">
+                    <div class="tarjeta-editorial__autores">
+                      {autores.map((autor) => (
+                        <a
+                          class="tarjeta-editorial__autor"
+                          href={`/autores/${autor.id}`}
+                        >
+                          <span class="tarjeta-editorial__avatar">
+                            {autor.data.foto ? (
+                              <img
+                                src={autor.data.foto}
+                                alt=""
+                                loading="lazy"
+                              />
+                            ) : (
+                              <span>{autor.data.iniciales}</span>
+                            )}
+                          </span>
+
+                          <span class="tarjeta-editorial__autor-nombre">
+                            {autor.data.nombre}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </span>
+
+                  <a
+                    class="tarjeta-editorial__flecha"
+                    href={`/analisis/${articulo.id}`}
+                    aria-label={`Leer ${articulo.data.titulo}`}
+                  >
+                    ↗
+                  </a>
+
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- SIN RESULTADOS -->
+        <p
+          class="sin-resultados"
+          id="sin-resultados"
+          hidden
+        >
+          No encontramos historias con esos filtros.
+          Prueba con otra búsqueda.
+        </p>
+
+        <!-- CARGAR MÁS -->
+        <div class="cargar-mas">
+          <button
+            id="boton-cargar"
+            type="button"
+            hidden
+          >
+            Cargar más historias
+            <span aria-hidden="true">↓</span>
+          </button>
+        </div>
+
+      </section>
+    </div>
   </div>
 </Base>
+
+<script>
+  const filtro =
+    document.querySelector<HTMLSelectElement>('#filtro-tema');
+
+  const buscar =
+    document.querySelector<HTMLInputElement>('#buscar');
+
+  const boton =
+    document.querySelector<HTMLButtonElement>('#boton-cargar');
+
+  const sinResultados =
+    document.querySelector<HTMLElement>('#sin-resultados');
+
+  const tarjetas = Array.from(
+    document.querySelectorAll<HTMLElement>('.tarjeta-editorial')
+  );
+
+  let limite = 9;
+
+  function actualizar() {
+    const tema = filtro?.value ?? '';
+
+    const texto = (buscar?.value ?? '')
+      .trim()
+      .toLocaleLowerCase('es');
+
+    const coincidencias = tarjetas.filter((tarjeta) => {
+      const temas = (tarjeta.dataset.temas ?? '').split('|');
+      const contenido = tarjeta.dataset.busqueda ?? '';
+
+      return (
+        (!tema || temas.includes(tema)) &&
+        (!texto || contenido.includes(texto))
+      );
+    });
+
+    tarjetas.forEach((tarjeta) => {
+      tarjeta.hidden = true;
+    });
+
+    coincidencias
+      .slice(0, limite)
+      .forEach((tarjeta) => {
+        tarjeta.hidden = false;
+      });
+
+    if (boton) {
+      boton.hidden = coincidencias.length <= limite;
+    }
+
+    if (sinResultados) {
+      sinResultados.hidden =
+        coincidencias.length !== 0 ||
+        tarjetas.length === 0;
+    }
+  }
+
+  filtro?.addEventListener('change', () => {
+    limite = 9;
+    actualizar();
+  });
+
+  buscar?.addEventListener('input', () => {
+    limite = 9;
+    actualizar();
+  });
+
+  boton?.addEventListener('click', () => {
+    limite += 9;
+    actualizar();
+  });
+
+  actualizar();
+</script>
+
+<style>
+  /* =====================================
+     BASE
+     ===================================== */
+
+  .caesius-home {
+    --fondo: #111111;
+    --texto: #f5f5f3;
+    --secundario: #a8a8a8;
+    --borde: #343434;
+    --acento: #00b4e8;
+
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .caesius-home *,
+  .caesius-home *::before,
+  .caesius-home *::after {
+    box-sizing: border-box;
+  }
+
+  .caesius-home a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .contenido {
+    width: min(calc(100% - 64px), 1440px);
+    margin: 0 auto;
+  }
+
+  /* =====================================
+     HERO
+     ===================================== */
+
+  .intro {
+    width: 100%;
+    padding: 105px 20px 95px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .intro h1 {
+    margin: 0 auto;
+
+    font-family: var(--sans);
+    font-size: clamp(38px, 4.5vw, 64px);
+    font-weight: 600;
+    line-height: 1.13;
+    letter-spacing: -0.055em;
+
+    color: var(--texto);
+  }
+
+  .intro__linea {
+    display: block;
+  }
+
+.intro__destacado {
+  display: inline;
+  font-family: var(--display);
+  font-size: 0.91em;
+  font-weight: 500;
+  line-height: inherit;
+  letter-spacing: -0.065em;
+
+  color: #f5f5f3;
+}
+
+.intro__destacado:hover {
+  background: linear-gradient(
+    100deg,
+    #505fff 0%,
+    #8197ff 35%,
+    #00b4e8 75%,
+    #e1fcfa 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+  .intro__subtitulo {
+    max-width: 800px;
+    margin: 26px auto 0;
+
+    font-family: var(--sans);
+    font-size: clamp(19px, 2vw, 25px);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.035em;
+
+    color: #c2c2c5;
+  }
+
+  /* =====================================
+     FILTROS
+     ===================================== */
+
+  .herramientas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 26px;
+  }
+
+  .herramientas select,
+  .herramientas input {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+
+    color: #f0f0f0;
+    background: #1d1d1d;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+
+    padding: 12px 15px;
+    outline-offset: 3px;
+  }
+
+  .herramientas select {
+    min-width: 205px;
+    cursor: pointer;
+  }
+
+  .herramientas input {
+    width: 260px;
+  }
+
+  .herramientas input::placeholder {
+    color: #999;
+  }
+
+  /* =====================================
+     REJILLA
+     ===================================== */
+
+  .rejilla-editorial {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px 24px;
+    align-items: stretch;
+  }
+
+  /* =====================================
+     TARJETA COMPLETA
+     ===================================== */
+
+  .tarjeta-editorial {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+    overflow: hidden;
+
+    background: #f1eee8;
+    color: #171717;
+
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition:
+      transform 250ms ease,
+      box-shadow 250ms ease;
+  }
+
+  .tarjeta-editorial:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  }
+
+  .tarjeta-editorial[hidden],
+  .sin-resultados[hidden],
+  #boton-cargar[hidden] {
+    display: none !important;
+  }
+
+  /* =====================================
+     IMAGEN CUADRADA 1:1
+     ===================================== */
+
+  .tarjeta-editorial__imagen {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+
+    overflow: hidden;
+    background: #dedede;
+  }
+
+  .tarjeta-editorial__imagen img {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition: transform 300ms ease;
+  }
+
+  .tarjeta-editorial:hover img {
+    transform: scale(1.025);
+  }
+
+  /* =====================================
+     CUERPO DE LA TARJETA
+     ===================================== */
+
+  .tarjeta-editorial__cuerpo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    min-height: 195px;
+    padding: 18px 20px 17px;
+  }
+
+  /* =====================================
+     ETIQUETA Y FECHA
+     ===================================== */
+
+  .tarjeta-editorial__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tarjeta-editorial__etiqueta {
+    display: inline-block;
+    max-width: 65%;
+
+    padding: 6px 12px;
+    border-radius: 999px;
+
+    background: #dbe0ff;
+    color: #3947bb;
+
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tarjeta-editorial__meta time {
+    flex-shrink: 0;
+
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.2;
+
+    color: #666666;
+    white-space: nowrap;
+  }
+
+  /* =====================================
+     TÍTULO — UNBOUNDED MEDIUM
+     ===================================== */
+
+  .tarjeta-editorial h2 {
+    margin: 17px 0 20px;
+
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.045em;
+
+    color: #171717;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+
+    overflow-wrap: anywhere;
+  }
+
+  .tarjeta-editorial h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .tarjeta-editorial h2 a:hover {
+    color: #505fff;
+  }
+
+  /* =====================================
+     PIE — AUTOR
+     ===================================== */
+
+  .tarjeta-editorial__pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: auto;
+    padding-top: 13px;
+
+    border-top: 1px solid #d7d2cb;
+  }
+
+  .tarjeta-editorial__autor {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+
+    padding: 3px 11px 3px 3px;
+    border-radius: 999px;
+
+    background: #e4e1db;
+  }
+
+  .tarjeta-editorial__avatar {
+    display: grid;
+    place-items: center;
+
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: #d4d8ee;
+    color: #505fff;
+  }
+
+  .tarjeta-editorial__avatar svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .tarjeta-editorial__autor-nombre {
+    min-width: 0;
+
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+
+    color: #383838;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* =====================================
+     FLECHA
+     ===================================== */
+
+  .tarjeta-editorial__flecha {
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: #171717;
+    color: #ffffff !important;
+
+    font-family: var(--sans);
+    font-size: 21px;
+    line-height: 1;
+
+    transition:
+      background 200ms ease,
+      transform 200ms ease;
+  }
+
+  .tarjeta-editorial:hover .tarjeta-editorial__flecha {
+    background: #505fff;
+    transform: rotate(45deg);
+  }
+
+  /* =====================================
+     CARGAR MÁS
+     ===================================== */
+
+  .cargar-mas {
+    display: flex;
+    justify-content: center;
+    padding: 65px 0 95px;
+  }
+
+  #boton-cargar {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 14px 24px;
+
+    background: transparent;
+    color: var(--texto);
+    border: 1px solid #555;
+    border-radius: 8px;
+
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+  }
+
+  #boton-cargar:hover {
+    background: #242424;
+  }
+
+  .sin-resultados {
+    padding: 30px 0;
+    color: var(--secundario);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* =====================================
+     TABLET
+     ===================================== */
+
+  @media (max-width: 900px) {
+    .intro {
+      padding: 95px 15px 80px;
+    }
+
+    .intro h1 {
+      font-size: clamp(36px, 5.5vw, 52px);
+    }
+
+    .rejilla-editorial {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px 20px;
+    }
+  }
+
+  /* =====================================
+     MÓVIL
+     ===================================== */
+
+  @media (max-width: 700px) {
+    .contenido {
+      width: calc(100% - 32px);
+    }
+
+    .intro {
+      padding: 80px 5px 65px;
+    }
+
+    .intro h1 {
+      font-size: clamp(30px, 7vw, 43px);
+      line-height: 1.16;
+      letter-spacing: -0.045em;
+    }
+
+    .intro__destacado {
+      font-size: 0.91em;
+    }
+
+    .intro__subtitulo {
+      margin-top: 22px;
+      font-size: 19px;
+    }
+
+    .herramientas {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .herramientas select,
+    .herramientas input {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .rejilla-editorial {
+      grid-template-columns: 1fr;
+      gap: 26px;
+    }
+
+    .tarjeta-editorial__cuerpo {
+      min-height: 195px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tarjeta-editorial,
+    .tarjeta-editorial__imagen img,
+    .tarjeta-editorial__flecha {
+      transition: none;
+    }
+  }
+
+  
+</style>

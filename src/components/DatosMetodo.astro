@@ -1,3 +1,4 @@
+
 ---
 // Recuadro "Datos y método" al final de cada artículo.
 import type { CollectionEntry } from 'astro:content';
@@ -7,46 +8,202 @@ interface Props {
 }
 
 const { datos } = Astro.props;
+
 const hayContenido =
-  datos.fuentes.length > 0 || datos.periodo || datos.metodo || datos.repositorio;
+  datos.fuentes.length > 0 ||
+  datos.periodo ||
+  datos.metodo ||
+  datos.repositorio;
 ---
 
 {hayContenido && (
   <aside class="datos" id="datos-y-metodo" aria-labelledby="datos-titulo">
-    <h2 id="datos-titulo">Datos y método</h2>
-    <dl>
+    <div class="datos__cabecera">
+      <span class="datos__indicador" aria-hidden="true"></span>
+      <h2 id="datos-titulo">Datos y método</h2>
+    </div>
+
+    <dl class="datos__lista">
       {datos.fuentes.length > 0 && (
-        <>
+        <div class="datos__fila">
           <dt>Fuentes</dt>
           <dd>
             <ul>
-              {datos.fuentes.map((f) => (
-                <li>{f.url ? <a href={f.url} rel="noopener">{f.nombre}</a> : f.nombre}</li>
+              {datos.fuentes.map((fuente) => (
+                <li>
+                  {fuente.url ? (
+                    <a
+                      href={fuente.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {fuente.nombre}
+                      <span aria-hidden="true">↗</span>
+                    </a>
+                  ) : (
+                    fuente.nombre
+                  )}
+                </li>
               ))}
             </ul>
           </dd>
-        </>
+        </div>
       )}
+
       {datos.periodo && (
-        <>
+        <div class="datos__fila">
           <dt>Periodo</dt>
           <dd>{datos.periodo}</dd>
-        </>
+        </div>
       )}
+
       {datos.metodo && (
-        <>
+        <div class="datos__fila">
           <dt>Método</dt>
           <dd>{datos.metodo}</dd>
-        </>
+        </div>
       )}
+
       {datos.repositorio && (
-        <>
+        <div class="datos__fila">
           <dt>Código</dt>
           <dd>
-            <a href={datos.repositorio} rel="noopener">{datos.repositorio.replace(/^https?:\/\//, '')}</a>
+            <a
+              href={datos.repositorio}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {datos.repositorio.replace(/^https?:\/\//, '')}
+              <span aria-hidden="true">↗</span>
+            </a>
           </dd>
-        </>
+        </div>
       )}
     </dl>
   </aside>
 )}
+
+<style>
+  .datos {
+    width: 100%;
+    padding: 30px 34px;
+    border: 1px solid #343434;
+    border-radius: 14px;
+    background: #1b1b1b;
+    color: #f5f5f3;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+  }
+
+  /* CABECERA */
+
+  .datos__cabecera {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .datos__indicador {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #8197ff;
+    box-shadow: 0 0 12px rgba(129, 151, 255, 0.35);
+  }
+
+  .datos__cabecera h2 {
+    margin: 0;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.04em;
+    color: #f5f5f3;
+  }
+
+  /* FILAS */
+
+  .datos__lista {
+    margin: 0;
+  }
+
+  .datos__fila {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 24px;
+    padding: 18px 0;
+    border-top: 1px solid #343434;
+  }
+
+  .datos__fila dt {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #f5f5f3;
+  }
+
+  .datos__fila dd {
+    min-width: 0;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #bdbdbd;
+    overflow-wrap: anywhere;
+  }
+
+  .datos__fila ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .datos__fila li + li {
+    margin-top: 9px;
+  }
+
+  /* ENLACES */
+
+  .datos__fila a {
+    color: #a8b7ff;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 180ms ease;
+  }
+
+  .datos__fila a:hover {
+    color: #00b4e8;
+  }
+
+  .datos__fila a span {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 13px;
+  }
+
+  /* MÓVIL */
+
+  @media (max-width: 700px) {
+    .datos {
+      padding: 24px 20px;
+      border-radius: 11px;
+    }
+
+    .datos__fila {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 16px 0;
+    }
+
+    .datos__cabecera {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .datos__fila a {
+      transition: none;
+    }
+  }
+</style>
