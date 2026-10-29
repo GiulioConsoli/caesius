@@ -7,4 +7,4 @@ enlaces:
     url: https://github.com/GiulioConsoli
 ---
 
-Fundador de Caesius.
+Co-fundador de Caesius.

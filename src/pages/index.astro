@@ -4,8 +4,16 @@ import Base from '../layouts/Base.astro';
 import { analisisPublicados } from '../lib/contenido';
 import { fechaISO, nombreTema } from '../lib/format';
 import { autoresDe } from '../lib/autores';
+import { getCollection } from 'astro:content';
 
 const articulos = await analisisPublicados();
+const todosLosArticulos = await getCollection('analisis');
+
+console.log('TODOS LOS ARTÍCULOS:');
+todosLosArticulos.forEach(a => {
+  console.log(a.id, '| idioma:', a.data.idioma, '| borrador:', a.data.borrador);
+});
+console.log("TÍTULOS:", articulos.map(a => a.data.titulo));
 const articulosConAutores = await Promise.all(
   articulos.map(async (articulo) => ({
     articulo,
@@ -95,7 +103,7 @@ const formatearMes = (fecha: string | Date) => {
               class="tarjeta-editorial"
               data-temas={articulo.data.temas.join('|')}
               data-busqueda={`${articulo.data.titulo} ${articulo.data.sumario}`.toLocaleLowerCase('es')}
-              hidden={indice >= 9}
+              hidden={indice >= 4}
             >
               <!-- IMAGEN 1:1 -->
               <a
@@ -219,7 +227,7 @@ const formatearMes = (fecha: string | Date) => {
     document.querySelectorAll<HTMLElement>('.tarjeta-editorial')
   );
 
-  let limite = 9;
+  let limite = 4;
 
   function actualizar() {
     const tema = filtro?.value ?? '';
@@ -270,7 +278,7 @@ const formatearMes = (fecha: string | Date) => {
   });
 
   boton?.addEventListener('click', () => {
-    limite += 9;
+    limite += 4;
     actualizar();
   });
 
@@ -426,7 +434,7 @@ const formatearMes = (fecha: string | Date) => {
 
   .rejilla-editorial {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 30px 24px;
     align-items: stretch;
   }
