@@ -1,16 +1,173 @@
+
 ---
 const anio = new Date().getFullYear();
 ---
 
-<footer class="pie">
-  <div class="contenedor pie__fila">
-    <div>
-     <strong style="color: var(--tinta)">Caesius</strong> · el mundo en datos<br />
-      © {anio} Caesius
+<footer class="footer-caesius">
+  <div class="footer-caesius__contenido">
+    <div class="footer-caesius__superior">
+      <div class="footer-caesius__intro">
+        <h2>¿Tienes algo que contar?</h2>
+        <p>
+          Nos gustan las buenas preguntas.
+          Y conocer a quienes también se las hacen.
+        </p>
+        <a href="/autores">
+          Conoce el proyecto <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <nav class="footer-caesius__nav" aria-label="Navegación del pie">
+        <div>
+          <h3>Explora</h3>
+          <a href="/analisis">Análisis</a>
+          <a href="/temas">Temas</a>
+          <a href="/autores">Autores</a>
+        </div>
+
+        <div>
+          <h3>CAESIUS</h3>
+          <a href="/autores">Quiénes somos</a>
+          <a href="/rss.xml">RSS</a>
+        </div>
+      </nav>
     </div>
-    <nav aria-label="Enlaces del pie">
-      <a href="/rss.xml">RSS</a>
-      <a href="https://github.com/GiulioConsoli/Caesius">Código fuente</a>
-    </nav>
+
+    <div class="footer-caesius__marca" aria-label="CAESIUS">
+      CAESIUS
+    </div>
+
+    <div class="footer-caesius__inferior">
+      <span>© {anio} CAESIUS</span>
+      <span>Hecho con curiosidad.</span>
+    </div>
   </div>
 </footer>
+
+<style>
+  .footer-caesius {
+    position: relative;
+    overflow: hidden;
+    color: #f5f5f3;
+    background: linear-gradient(
+      180deg,
+      #111111 0%,
+      #111111 12%,
+      #073c54 42%,
+      #007fa8 63%,
+      #505fff 87%,
+      #8197ff 100%
+    );
+    font-family: var(--sans);
+  }
+
+  .footer-caesius__contenido {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 115px 40px 22px;
+  }
+
+  .footer-caesius__superior {
+    display: flex;
+    justify-content: space-between;
+    gap: 70px;
+    margin-bottom: 100px;
+  }
+
+  .footer-caesius__intro {
+    max-width: 420px;
+  }
+
+  .footer-caesius__intro h2 {
+    margin: 0 0 15px;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -.04em;
+  }
+
+  .footer-caesius__intro p {
+    margin: 0 0 22px;
+    max-width: 340px;
+    color: #e2edf4;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .footer-caesius__intro a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .footer-caesius__nav {
+    display: flex;
+    gap: 85px;
+  }
+
+  .footer-caesius__nav > div {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-caesius__nav h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .footer-caesius__nav a {
+    color: #e4e9ef;
+    font-size: 15px;
+    text-decoration: none;
+  }
+
+  .footer-caesius__nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .footer-caesius__marca {
+    font-family: var(--display);
+    font-size: clamp(65px, 14.8vw, 220px);
+    font-weight: 700;
+    letter-spacing: -.085em;
+    line-height: .95;
+    text-align: center;
+    white-space: nowrap;
+    color: #f5f5f3;
+  }
+
+  .footer-caesius__inferior {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding-top: 24px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  @media (max-width: 700px) {
+    .footer-caesius__contenido {
+      padding: 80px 20px 20px;
+    }
+
+    .footer-caesius__superior {
+      flex-direction: column;
+      gap: 45px;
+      margin-bottom: 80px;
+    }
+
+    .footer-caesius__nav {
+      gap: 55px;
+    }
+
+    .footer-caesius__marca {
+      font-size: clamp(40px, 14vw, 100px);
+    }
+  }
+</style>
