@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Tarjeta from '../../components/Tarjeta.astro';
 import { analisisPublicados, temasConArticulos } from '../../lib/contenido';
 import { nombreTema } from '../../lib/format';
+import FondoAscii from '../../components/FondoAscii.astro';
 
 const articulos = await analisisPublicados();
 const temas = [...(await temasConArticulos()).entries()].sort((a, b) => b[1] - a[1]);

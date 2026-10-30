@@ -1,4 +1,3 @@
-
 ---
 // Página de artículo. Se genera una por cada archivo en src/content/analisis/.
 import { render } from 'astro:content';
@@ -9,6 +8,7 @@ import Tarjeta from '../../components/Tarjeta.astro';
 import Firmas from '../../components/Firmas.astro';
 import { autoresDe } from '../../lib/autores';
 import { analisisPublicados } from '../../lib/contenido';
+import FondoAscii from '../../components/FondoAscii.astro';
 import {
   formatearFecha,
   fechaISO,

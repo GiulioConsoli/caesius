@@ -5,6 +5,7 @@ import { analisisPublicados } from '../lib/contenido';
 import { fechaISO, nombreTema } from '../lib/format';
 import { autoresDe } from '../lib/autores';
 import { getCollection } from 'astro:content';
+import FondoAscii from '../components/FondoAscii.astro';
 
 const articulos = await analisisPublicados();
 const todosLosArticulos = await getCollection('analisis');
@@ -43,6 +44,9 @@ const formatearMes = (fecha: string | Date) => {
   imagen={articulos[0]?.data.figura.src}
 >
   <div class="caesius-home">
+    <div class="inicio-ascii" aria-hidden="true">
+      <FondoAscii />
+    </div>
     <div class="contenido">
 
       <!-- HERO -->
@@ -55,7 +59,7 @@ const formatearMes = (fecha: string | Date) => {
         </h1>
 
         <p class="intro__subtitulo">
-          Hay preguntas que merecen más que una opinión.
+          Hay preguntas que merecen más que una opinión, las respondemos con datos.
         </p>
       </header>
 
@@ -103,7 +107,7 @@ const formatearMes = (fecha: string | Date) => {
               class="tarjeta-editorial"
               data-temas={articulo.data.temas.join('|')}
               data-busqueda={`${articulo.data.titulo} ${articulo.data.sumario}`.toLocaleLowerCase('es')}
-              hidden={indice >= 4}
+              hidden={indice >= 8}
             >
               <!-- IMAGEN 1:1 -->
               <a
@@ -227,7 +231,7 @@ const formatearMes = (fecha: string | Date) => {
     document.querySelectorAll<HTMLElement>('.tarjeta-editorial')
   );
 
-  let limite = 4;
+  let limite = 8;
 
   function actualizar() {
     const tema = filtro?.value ?? '';
@@ -268,17 +272,17 @@ const formatearMes = (fecha: string | Date) => {
   }
 
   filtro?.addEventListener('change', () => {
-    limite = 9;
+    limite = 8;
     actualizar();
   });
 
   buscar?.addEventListener('input', () => {
-    limite = 9;
+    limite = 8;
     actualizar();
   });
 
   boton?.addEventListener('click', () => {
-    limite += 4;
+    limite += 8;
     actualizar();
   });
 
@@ -297,6 +301,8 @@ const formatearMes = (fecha: string | Date) => {
     --borde: #343434;
     --acento: #00b4e8;
 
+    position: relative;
+    isolation: isolate;
     min-height: 100vh;
     background: var(--fondo);
     color: var(--texto);
@@ -318,6 +324,8 @@ const formatearMes = (fecha: string | Date) => {
   }
 
   .contenido {
+    position: relative;
+    z-index: 1;
     width: min(calc(100% - 64px), 1440px);
     margin: 0 auto;
   }
@@ -331,6 +339,8 @@ const formatearMes = (fecha: string | Date) => {
     padding: 105px 20px 95px;
     margin: 0 auto;
     text-align: center;
+    position: relative;
+    isolation: isolate;
   }
 
   .intro h1 {
@@ -377,7 +387,7 @@ const formatearMes = (fecha: string | Date) => {
 
   .intro__subtitulo {
     max-width: 800px;
-    margin: 26px auto 0;
+    margin: 16px auto 0;
 
     font-family: var(--sans);
     font-size: clamp(19px, 2vw, 25px);
@@ -449,6 +459,9 @@ const formatearMes = (fecha: string | Date) => {
 
     min-width: 0;
     overflow: hidden;
+
+    position: relative;
+    z-index: 1;
 
     background: #f1eee8;
     color: #171717;
@@ -808,5 +821,33 @@ const formatearMes = (fecha: string | Date) => {
     }
   }
 
-  
+  /* Fondo ASCII: cubre toda la portada sin un borde brusco */
+  .inicio-ascii {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.55;
+    -webkit-mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      black 13%,
+      black 82%,
+      transparent 100%);
+    mask-image: linear-gradient(to bottom,
+      transparent 0%,
+      black 13%,
+      black 82%,
+      transparent 100%);
+  }
+
+  .inicio-ascii :global(.ascii-field),
+  .inicio-ascii :global(canvas) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .inicio-ascii :global(canvas) {
+    display: block;
+  }
 </style>
