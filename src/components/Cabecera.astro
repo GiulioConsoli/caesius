@@ -3,8 +3,8 @@
 const ruta = Astro.url.pathname;
 
 const menu = [
-  { texto: 'Análisis', href: '/analisis' },
   { texto: 'Temas', href: '/temas' },
+  { texto: 'About', href: '/about' },
   { texto: 'Autores', href: '/autores' },
 ];
 
@@ -39,7 +39,23 @@ function activo(href: string): boolean {
     </div>
 
     <a class="navbar__boton" href="/autores">
-      Quiero participar <span aria-hidden="true">↗</span>
+      Quiero participar
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="17"
+        height="17"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        class="navbar__icono"
+      >
+        <path d="M7 17 17 7" />
+        <path d="M7 7h10v10" />
+      </svg>
     </a>
   </nav>
 </header>
@@ -143,12 +159,12 @@ function activo(href: string): boolean {
 
   .navbar__enlaces a:hover {
     color: #ffffff;
-    background: #222222;
+    background: #252c62;
   }
 
   .navbar__enlaces a.activo {
     color: #ffffff;
-    background: #292929;
+    background: #303a80;
   }
 
   .navbar__boton {
@@ -270,4 +286,21 @@ function activo(href: string): boolean {
       transition: none;
     }
   }
+
+
+
+.navbar__icono {
+  display: block;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+  .navbar__icono {
+    width: 15px;
+    height: 15px;
+  }
+}
+
 </style>

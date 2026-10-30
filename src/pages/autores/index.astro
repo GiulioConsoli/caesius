@@ -1,30 +1,501 @@
 ---
-// Lista de autores.
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import FondoAscii from '../../components/FondoAscii.astro';
 
-const autores = (await getCollection('autores')).sort((a, b) =>
-  a.data.nombre.localeCompare(b.data.nombre, 'es'),
-);
+const autores = [
+  {
+    nombre: 'Ana García',
+    iniciales: 'AG',
+    rol: 'Cofundadora',
+    formacion: 'Máster en Big Data y Ciencia de Datos',
+    background: 'Diseño, desarrollo web y Comunicación Corporativa.',
+    intereses: 'Viajar, descubrir otras culturas (y comidas) y aprender cosas nuevas.',
+    pregunta: '¿Cuántas cosas damos por ciertas sin comprobarlas?',
+    viernes: 'Entrenar sin prisas, pasar un rato haciendo mis cosas en el ordenador y preparar una buena cena en compañía.',
+    debilidad: 'Los vídeos de reformas y el chocolate.',
+    opinion: 'Prefiero un análisis que me haga cambiar de opinión a uno que confirme lo que ya pensaba.',
+    linkedin: 'https://www.linkedin.com/in/ana-garez/',
+    perfil: '/autores/ana-garcia',
+  },
+  {
+    nombre: 'Giulio Consoli',
+    iniciales: 'GC',
+    rol: 'Cofundador',
+    formacion: 'Máster en Big Data y Ciencia de Datos',
+    background: 'Ciencias Sociales con Estadística (UCL).',
+    intereses: 'Estar en la naturaleza, descubrir sitios nuevos y conocer gente.',
+    pregunta: 'Más allá de las opiniones, ¿qué nos dicen los datos?',
+    viernes: 'Un día tranquilo que me deje adelantar la organización del lunes y el martes (quizá demasiado ideal).',
+    debilidad: 'Los partidos del Milán y TikTok de noche.',
+    opinion: 'El mejor análisis no es nada si no tiene una buena visualización y presentación.',
+    linkedin: '',
+    perfil: '/autores/giulio-consoli',
+  },
+];
 ---
 
-<Base titulo="Autores" descripcion="Quién escribe en Caesius.">
-  <div class="contenedor">
-    <header class="pagina__cabecera">
-      <h1>Autores</h1>
-    </header>
-    <ul class="autores">
-      {autores.map((autor) => (
-        <li>
-          <span class="monograma monograma--grande" aria-hidden="true">
-            {autor.data.foto ? <img src={autor.data.foto} alt="" /> : autor.data.iniciales}
-          </span>
-          <div>
-            <h3><a href={`/autores/${autor.id}`} style="color: inherit">{autor.data.nombre}</a></h3>
-            <p>{autor.data.rol}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </div>
+<Base
+  titulo="Autores | CAESIUS"
+  descripcion="Conoce a las personas detrás de los análisis de CAESIUS."
+>
+  <main class="autores-pagina">
+    <div class="autores-fondo" aria-hidden="true">
+      <FondoAscii />
+    </div>
+    <div class="autores-contenedor">
+
+      <!-- INTRODUCCIÓN -->
+      <header class="autores-intro">
+        <span class="autores-etiqueta">LAS PERSONAS DETRÁS DE CAESIUS</span>
+
+        <h1>
+          Conócenos
+          <span>mejor.</span>
+        </h1>
+
+        <p>
+          Tenemos trayectorias e intereses diferentes, pero compartimos
+          algo: la curiosidad por entender mejor lo que ocurre a nuestro
+          alrededor. Aquí puedes conocernos un poco más allá de nuestros análisis.
+        </p>
+      </header>
+
+      <!-- PERFILES -->
+      <section class="autores-rejilla" aria-label="Autores de CAESIUS">
+
+        {autores.map((autor) => (
+          <article class="autor-card">
+
+            <div class="autor-card__cabecera">
+              <div class="autor-card__avatar" aria-hidden="true">
+                {autor.iniciales}
+              </div>
+
+              <div class="autor-card__identidad">
+                <span class="autor-card__rol">{autor.rol}</span>
+                <h2>{autor.nombre}</h2>
+                <p>{autor.formacion}</p>
+              </div>
+            </div>
+
+            <div class="autor-card__campos">
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <rect x="3" y="7" width="18" height="14" rx="2"/>
+                    <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                  </svg>
+                  <h3>Background</h3>
+                </div>
+                <p>{autor.background}</p>
+              </div>
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M12 21s-7-4.4-7-10a7 7 0 0 1 14 0c0 5.6-7 10-7 10Z"/>
+                    <circle cx="12" cy="11" r="2"/>
+                  </svg>
+                  <h3>Cuando cierro el portátil</h3>
+                </div>
+                <p>{autor.intereses}</p>
+              </div>
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/>
+                    <path d="M12 17h.01"/>
+                  </svg>
+                  <h3>Una pregunta que no me deja en paz</h3>
+                </div>
+                <p>{autor.pregunta}</p>
+              </div>
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M8 3v3M16 3v3M4 10h16"/>
+                    <rect x="4" y="5" width="16" height="16" rx="2"/>
+                    <path d="M9 15h6"/>
+                  </svg>
+                  <h3>Mi viernes ideal</h3>
+                </div>
+                <p>{autor.viernes}</p>
+              </div>
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                    <path d="M9 9h.01M15 9h.01"/>
+                  </svg>
+                  <h3>Mi pequeño placer culpable</h3>
+                </div>
+                <p>{autor.debilidad}</p>
+              </div>
+
+              <div class="autor-card__campo">
+                <div class="autor-card__campo-titulo">
+                  <svg viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3 8.5 8.5 0 0 1 21 11.5Z"/>
+                    <path d="M8 11h8"/>
+                  </svg>
+                  <h3>Mi opinión impopular</h3>
+                </div>
+                <p>{autor.opinion}</p>
+              </div>
+
+            </div>
+
+            <div class="autor-card__pie">
+              <a href={autor.perfil} class="autor-card__perfil">
+                Ver análisis
+                <svg viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M7 17 17 7M7 7h10v10"/>
+                </svg>
+              </a>
+
+              {autor.linkedin && (
+                <a
+                  href={autor.linkedin}
+                  class="autor-card__linkedin"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`LinkedIn de ${autor.nombre}`}
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <path d="M20.45 2H3.55A1.55 1.55 0 0 0 2 3.55v16.9A1.55 1.55 0 0 0 3.55 22h16.9A1.55 1.55 0 0 0 22 20.45V3.55A1.55 1.55 0 0 0 20.45 2ZM7.93 18.74H5.21V9.96h2.72ZM6.57 8.76a1.58 1.58 0 1 1 0-3.16 1.58 1.58 0 0 1 0 3.16Zm12.17 9.98h-2.72v-4.27c0-1.02-.02-2.33-1.42-2.33-1.42 0-1.64 1.11-1.64 2.26v4.34h-2.72V9.96h2.61v1.2h.04a2.86 2.86 0 0 1 2.57-1.42c2.75 0 3.26 1.81 3.26 4.17Z"/>
+                  </svg>
+                  LinkedIn
+                </a>
+              )}
+            </div>
+
+          </article>
+        ))}
+      </section>
+
+    </div>
+  </main>
 </Base>
+
+<style>
+  .autores-pagina {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 100px 24px 130px;
+    background: #111111;
+    color: #f5f5f3;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+  }
+
+  .autores-pagina * {
+    box-sizing: border-box;
+  }
+
+  /* ASCII discreto detrás de los perfiles */
+  .autores-fondo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: .28;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 78%, transparent 100%);
+  }
+
+  .autores-fondo :global(.ascii-field),
+  .autores-fondo :global(canvas) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .autores-contenedor {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 1300px);
+    margin: 0 auto;
+  }
+
+  /* INTRODUCCIÓN */
+
+  .autores-intro {
+    max-width: 900px;
+    margin-bottom: 65px;
+  }
+
+  .autores-etiqueta {
+    display: block;
+    margin-bottom: 22px;
+    color: #8197ff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+
+  .autores-intro h1 {
+    margin: 0;
+    font-size: clamp(38px, 5vw, 70px);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -.06em;
+  }
+
+  .autores-intro h1 span {
+    display: block;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: .8em;
+    font-weight: 500;
+  }
+
+  .autores-intro p {
+    max-width: 680px;
+    margin: 25px 0 0;
+    color: #a8a8a8;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  /* REJILLA */
+
+  .autores-rejilla {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  /* TARJETA */
+
+  .autor-card {
+    display: flex;
+    flex-direction: column;
+    padding: 36px;
+    border: 1px solid #343434;
+    border-radius: 20px;
+    background: rgba(29, 29, 29, .98);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    transition: border-color .25s ease;
+  }
+
+  .autor-card:hover {
+    border-color: #505fff;
+  }
+
+  .autor-card__cabecera {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #343434;
+  }
+
+  .autor-card__avatar {
+    display: grid;
+    place-items: center;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #252c62, #3947bb);
+    color: #f5f5f3;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  .autor-card__identidad {
+    min-width: 0;
+  }
+
+  .autor-card__rol {
+    display: block;
+    margin-bottom: 10px;
+    color: #8197ff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .autor-card__identidad h2 {
+    margin: 0 0 8px;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: clamp(19px, 2vw, 26px);
+    font-weight: 500;
+    letter-spacing: -.045em;
+  }
+
+  .autor-card__identidad p {
+    margin: 0;
+    color: #a8a8a8;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* CAMPOS */
+
+  .autor-card__campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 35px 26px;
+    padding: 35px 0;
+    flex: 1;
+  }
+
+  .autor-card__campo {
+    min-width: 0;
+  }
+
+  .autor-card__campo-titulo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+  }
+
+  .autor-card__campo-titulo svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: #8197ff;
+  }
+
+  .autor-card__campo h3 {
+    margin: 0;
+    color: #f5f5f3;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .autor-card__campo p {
+    margin: 0;
+    color: #a8a8a8;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* PIE */
+
+  .autor-card__pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding-top: 25px;
+    border-top: 1px solid #343434;
+  }
+
+  .autor-card__perfil,
+  .autor-card__linkedin {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #f5f5f3;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .2s;
+  }
+
+  .autor-card__perfil:hover,
+  .autor-card__linkedin:hover {
+    color: #8197ff;
+  }
+
+  .autor-card__perfil svg,
+  .autor-card__linkedin svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* TABLET */
+
+  @media (max-width: 1000px) {
+    .autores-rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* MÓVIL */
+
+  @media (max-width: 700px) {
+    .autores-pagina {
+      padding: 65px 16px 90px;
+    }
+
+    .autores-intro {
+      margin-bottom: 40px;
+    }
+
+    .autores-intro h1 {
+      font-size: clamp(34px, 8vw, 48px);
+    }
+
+    .autores-intro p {
+      font-size: 15px;
+    }
+
+    .autor-card {
+      padding: 25px;
+    }
+
+    .autor-card__cabecera {
+      gap: 15px;
+    }
+
+    .autor-card__avatar {
+      width: 65px;
+      height: 65px;
+      font-size: 18px;
+    }
+
+    .autor-card__identidad h2 {
+      font-size: 18px;
+    }
+
+    .autor-card__campos {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .autor-card,
+    .autor-card__perfil,
+    .autor-card__linkedin {
+      transition: none;
+    }
+  }
+</style>

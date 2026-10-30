@@ -1,28 +1,314 @@
+
 ---
-// Índice de temas: sólo los que tienen al menos un análisis publicado.
+// Índice de temas: solo los que tienen al menos un análisis publicado.
 import Base from '../../layouts/Base.astro';
 import { temasConArticulos } from '../../lib/contenido';
 import { nombreTema } from '../../lib/format';
+import FondoAscii from '../../components/FondoAscii.astro';
 
-const temas = [...(await temasConArticulos()).entries()].sort((a, b) => b[1] - a[1]);
+const temas = [...(await temasConArticulos()).entries()]
+  .sort((a, b) => b[1] - a[1]);
 ---
 
-<Base titulo="Temas" descripcion="Los análisis de Caesius, agrupados por tema.">
-  <div class="contenedor">
-    <header class="pagina__cabecera">
-      <h1>Temas</h1>
-    </header>
-    <ul class="lista">
-      {temas.map(([slug, n]) => (
-        <li>
-          <h2 style="font-size: var(--t-md); margin: 0">
-            <a href={`/temas/${slug}`}>{nombreTema(slug)}</a>
-          </h2>
-          <span class="mono" style="color: var(--gris-500)">
-            {n} análisis
-          </span>
-        </li>
-      ))}
-    </ul>
-  </div>
+<Base
+  titulo="Temas | CAESIUS"
+  descripcion="Explora los análisis de CAESIUS agrupados por tema."
+>
+  <main class="temas-pagina">
+
+    <div class="fondo-ascii" aria-hidden="true">
+      <FondoAscii />
+    </div>
+
+    <div class="temas-contenedor">
+
+      <header class="temas-cabecera">
+        <span class="temas-etiqueta">EXPLORA CAESIUS</span>
+        <h1>Explora por <span>temas.</span></h1>
+        <p>
+          Diferentes preguntas, distintas formas de entender
+          lo que nos rodea.
+        </p>
+      </header>
+
+      <section class="temas-rejilla" aria-label="Categorías de análisis">
+        {temas.map(([slug, cantidad], indice) => (
+          <a class="tema-tarjeta" href={`/temas/${slug}`}>
+
+            <div class="tema-tarjeta__superior">
+              <span class="tema-tarjeta__numero">
+                {String(indice + 1).padStart(2, '0')}
+              </span>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17 17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </div>
+
+            <div class="tema-tarjeta__inferior">
+              <h2>{nombreTema(slug)}</h2>
+              <span>
+                {cantidad} {cantidad === 1 ? 'análisis' : 'análisis'}
+              </span>
+            </div>
+
+          </a>
+        ))}
+      </section>
+
+    </div>
+  </main>
 </Base>
+
+<style>
+  .temas-pagina {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    padding: 100px 24px 140px;
+    background: #111111;
+    color: #f5f5f3;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+  }
+
+  .temas-pagina *,
+  .temas-pagina *::before,
+  .temas-pagina *::after {
+    box-sizing: border-box;
+  }
+
+  /* FONDO ASCII */
+
+  .fondo-ascii {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.4;
+
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 13%,
+      black 82%,
+      transparent 100%
+    );
+
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 13%,
+      black 82%,
+      transparent 100%
+    );
+  }
+
+  .fondo-ascii :global(.ascii-field),
+  .fondo-ascii :global(canvas) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .fondo-ascii :global(canvas) {
+    display: block;
+  }
+
+  .temas-contenedor {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 1300px);
+    margin: 0 auto;
+  }
+
+  /* CABECERA */
+
+  .temas-cabecera {
+    max-width: 780px;
+    margin-bottom: 65px;
+  }
+
+  .temas-etiqueta {
+    display: block;
+    margin-bottom: 20px;
+    color: #8197ff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+  }
+
+  .temas-cabecera h1 {
+    margin: 0;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+    font-size: clamp(42px, 5vw, 72px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -.06em;
+  }
+
+  .temas-cabecera h1 span {
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: .82em;
+    font-weight: 500;
+  }
+
+  .temas-cabecera p {
+    max-width: 600px;
+    margin: 24px 0 0;
+    color: #a8a8a8;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* REJILLA */
+
+  .temas-rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  /* TARJETAS OSCURAS CON DESENFOQUE */
+
+  .tema-tarjeta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 255px;
+    padding: 30px;
+
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 18px;
+
+    background: rgba(23, 23, 23, .96);
+
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+
+    color: #f5f5f3;
+    text-decoration: none;
+
+    transition:
+      border-color .25s ease,
+      background .25s ease,
+      transform .25s ease;
+  }
+
+  .tema-tarjeta:hover {
+    border-color: rgba(129, 151, 255, .55);
+    background: rgba(27, 27, 29, .98);
+    transform: translateY(-4px);
+  }
+
+  .tema-tarjeta:focus-visible {
+    outline: 2px solid #8197ff;
+    outline-offset: 4px;
+  }
+
+  .tema-tarjeta__superior {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .tema-tarjeta__numero {
+    color: #8197ff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+  }
+
+  .tema-tarjeta__superior svg {
+    width: 23px;
+    height: 23px;
+    color: #8197ff;
+    transition: transform .25s ease;
+  }
+
+  .tema-tarjeta:hover svg {
+    transform: translate(3px, -3px);
+  }
+
+  .tema-tarjeta__inferior h2 {
+    margin: 0 0 12px;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: clamp(17px, 1.6vw, 22px);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -.045em;
+  }
+
+  .tema-tarjeta__inferior span {
+    color: #a8a8a8;
+    font-size: 13px;
+  }
+
+  /* TABLET */
+
+  @media (max-width: 900px) {
+    .temas-pagina {
+      padding: 80px 24px 100px;
+    }
+
+    .temas-rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  /* MÓVIL */
+
+  @media (max-width: 700px) {
+    .temas-pagina {
+      padding: 65px 16px 90px;
+    }
+
+    .temas-cabecera {
+      margin-bottom: 40px;
+    }
+
+    .temas-cabecera h1 {
+      font-size: clamp(34px, 8vw, 48px);
+    }
+
+    .temas-cabecera p {
+      font-size: 15px;
+    }
+
+    .temas-rejilla {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .tema-tarjeta {
+      min-height: 210px;
+      padding: 25px;
+    }
+
+    .tema-tarjeta__inferior h2 {
+      font-size: 19px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tema-tarjeta,
+    .tema-tarjeta__superior svg {
+      transition: none;
+    }
+
+    .tema-tarjeta:hover {
+      transform: none;
+    }
+  }
+</style>

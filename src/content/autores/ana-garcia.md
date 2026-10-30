@@ -1,6 +1,6 @@
 ---
 nombre: Ana García
-rol: Fundador de Caesius
+rol: Co-fundadora de Caesius
 iniciales: AG
 enlaces:
   - etiqueta: GitHub

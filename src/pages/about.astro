@@ -1,0 +1,500 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  titulo="About | CAESIUS"
+  descripcion="Conoce CAESIUS, un proyecto independiente de análisis de datos para comprender mejor nuestra sociedad."
+>
+  <main class="about">
+
+    <!-- SECCIÓN VISUAL -->
+    <section class="about-visual" aria-labelledby="about-titulo">
+      <div class="about-visual__contenido">
+        <span class="about-visual__etiqueta">ABOUT / CAESIUS</span>
+
+        <h1 id="about-titulo">
+          Los datos no siempre
+          <span>hablan por sí solos.</span>
+        </h1>
+
+        <p>
+          Investigamos lo que ocurre a nuestro alrededor
+          para comprender lo que hay detrás de las cifras.
+          CAESIUS es un espacio independiente para explorar cuestiones 
+          sociales a través de datos, evidencia y contexto.
+        </p>
+
+        <a href="#sobre-nosotros" class="about-visual__enlace">
+          Descubre CAESIUS
+          <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- TRES BLOQUES -->
+    <section class="about-info" id="sobre-nosotros">
+      <div class="about-info__cabecera">
+        <span class="about-info__etiqueta">EL PROYECTO</span>
+        <h2>Una forma diferente de mirar los datos.</h2>
+      </div>
+
+
+<div class="about-info__rejilla">
+
+  <!-- TARJETA 1 -->
+  <article class="about-info__bloque">
+    <div class="about-info__superior">
+      <span class="about-info__numero">01 / IDENTIDAD</span>
+
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M3 12h18"/>
+        <path d="M12 3a15 15 0 0 1 0 18"/>
+        <path d="M12 3a15 15 0 0 0 0 18"/>
+      </svg>
+    </div>
+
+    <h3>Qué es CAESIUS</h3>
+    <p>
+      Un proyecto independiente de análisis e investigación
+      que explora cuestiones que nos hacemos todos.
+      Buscamos respuestas en los datos.
+    </p>
+  </article>
+
+  <!-- TARJETA 2 -->
+  <article class="about-info__bloque">
+    <div class="about-info__superior">
+      <span class="about-info__numero">02 / PROPÓSITO</span>
+
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="m16 16 5 5"/>
+        <path d="M8 11h6"/>
+        <path d="M11 8v6"/>
+      </svg>
+    </div>
+
+    <h3>Por qué nace</h3>
+    <p>
+      Los titulares simplifican realidades que rara vez
+      son sencillas. Queremos ir un poco más allá:
+      contrastar lo que creemos saber, entender los
+      matices y descubrir qué hay detrás de los números.
+    </p>
+  </article>
+
+  <!-- TARJETA 3 -->
+  <article class="about-info__bloque">
+    <div class="about-info__superior">
+      <span class="about-info__numero">03 / METODOLOGÍA</span>
+
+      <svg viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true">
+        <path d="M4 19V5"/>
+        <path d="M4 19h16"/>
+        <path d="m7 15 4-5 4 3 5-7"/>
+        <circle cx="7" cy="15" r="1"/>
+        <circle cx="11" cy="10" r="1"/>
+        <circle cx="15" cy="13" r="1"/>
+        <circle cx="20" cy="6" r="1"/>
+      </svg>
+    </div>
+
+    <h3>Cómo trabajamos</h3>
+    <p>
+      Trabajamos con fuentes contrastables, metodologías
+      transparentes y visualizaciones que ayudan a
+      interpretar los resultados. No buscamos que los
+      datos encajen en una conclusión, sino que las
+      conclusiones respondan a la evidencia.
+    </p>
+  </article>
+
+</div>
+
+    </section>
+
+    <!-- ENLACE A AUTORES -->
+    <section class="about-equipo">
+      <div>
+        <span class="about-info__etiqueta">LAS PERSONAS</span>
+        <h2>Detrás de cada análisis hay una mirada diferente.</h2>
+        <p>
+          Conoce a quienes investigan, analizan y cuentan
+          las historias de CAESIUS.
+        </p>
+      </div>
+
+      <a href="/autores" class="about-equipo__boton">
+        Conoce a los autores
+        <svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <path d="M7 17 17 7M7 7h10v10"/>
+        </svg>
+      </a>
+    </section>
+
+  </main>
+</Base>
+
+<style>
+  .about {
+    --fondo: #111111;
+    --texto: #f5f5f3;
+    --secundario: #a8a8a8;
+    --acento: #8197ff;
+
+    min-height: 100vh;
+    padding: 24px 24px 110px;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+  }
+
+  .about *,
+  .about *::before,
+  .about *::after {
+    box-sizing: border-box;
+  }
+
+  /* IMAGEN PRINCIPAL */
+.about-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+
+  min-height: 520px;
+  padding: 65px 30px;
+
+  overflow: hidden;
+  border-radius: 24px;
+
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(0, 0, 0, .12) 0%,
+      rgba(0, 0, 0, .34) 100%
+    ),
+    url('/about-fondo.webp');
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+  .about-visual__contenido {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-visual__etiqueta {
+    display: inline-block;
+    margin-bottom: 28px;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, .18);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    backdrop-filter: blur(8px);
+  }
+
+    .about-visual h1 {
+    margin: 0;
+    font-family: var(--sans, 'Syne Variable', sans-serif);
+    font-size: clamp(34px, 4.2vw, 62px);
+    font-weight: 600;
+    line-height: 1.12;
+    letter-spacing: -0.055em;
+    color: #fff;
+    text-wrap: balance;
+    }
+
+    .about-visual h1 span {
+    display: block;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: .75em;
+    font-weight: 500;
+    letter-spacing: -0.065em;
+    }
+
+    .about-visual__contenido > p {
+    max-width: 570px;
+    margin: 22px auto 28px;
+    color: #f5f5f3;
+    font-size: clamp(14px, 1.3vw, 17px);
+    line-height: 1.55;
+    text-wrap: balance;
+    }
+
+  .about-visual__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    background: #f5f5f3;
+    color: #111;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s, transform .2s;
+  }
+
+  .about-visual__enlace:hover {
+    background: #e1fcfa;
+    transform: translateY(-2px);
+  }
+
+  .about-visual__enlace svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* BLOQUES INFORMATIVOS */
+
+  .about-info {
+    width: min(100%, 1300px);
+    margin: 0 auto;
+    padding: 120px 0 100px;
+    scroll-margin-top: 40px;
+  }
+
+  .about-info__cabecera {
+    max-width: 780px;
+    margin-bottom: 50px;
+  }
+
+  .about-info__etiqueta {
+    display: block;
+    margin-bottom: 18px;
+    color: var(--acento);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .about-info h2,
+  .about-equipo h2 {
+    margin: 0;
+    font-family: var(--display, 'Unbounded Variable', sans-serif);
+    font-size: clamp(26px, 3vw, 42px);
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -.055em;
+  }
+
+  .about-info__rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+.about-info__bloque {
+  min-height: 285px;
+  padding: 30px 28px;
+  border: 1px solid #343434;
+  border-radius: 18px;
+  background: #1d1d1d;
+
+  transition: border-color .2s, transform .2s;
+}
+
+.about-info__bloque:hover {
+  border-color: #505fff;
+  transform: translateY(-3px);
+}
+
+.about-info__superior {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 45px;
+}
+
+.about-info__numero {
+  display: block;
+  margin: 0;
+  color: #8197ff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+}
+
+.about-info__superior svg {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #8197ff;
+}
+
+.about-info__bloque h3 {
+  margin: 0 0 16px;
+  font-family: var(--display, 'Unbounded Variable', sans-serif);
+  font-size: clamp(15px, 1.35vw, 18px);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -.045em;
+}
+
+.about-info__bloque p {
+  margin: 0;
+  color: #bdbdbd;
+  font-size: 14px;
+  line-height: 1.7;
+}
+  /* AUTORES */
+
+  .about-equipo {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 40px;
+    width: min(100%, 1300px);
+    margin: 0 auto;
+    padding: 65px 0;
+    border-top: 1px solid #343434;
+  }
+
+  .about-equipo > div {
+    max-width: 720px;
+  }
+
+  .about-equipo p {
+    margin: 22px 0 0;
+    color: #a8a8a8;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .about-equipo__boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-shrink: 0;
+    padding: 15px 22px;
+    border: 1px solid #555;
+    border-radius: 10px;
+    color: #f5f5f3;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .2s;
+  }
+
+  .about-equipo__boton:hover {
+    background: #242424;
+  }
+
+  .about-equipo__boton svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* TABLET */
+
+  @media (max-width: 900px) {
+    .about-visual {
+      min-height: 480px;
+    }
+
+    .about-info__rejilla {
+      gap: 14px;
+    }
+
+    .about-info__bloque {
+      padding: 30px 22px;
+    }
+
+    .about-info__superior {
+      margin-bottom: 30px;
+    }
+  }
+
+  /* MÓVIL */
+
+  @media (max-width: 700px) {
+    .about {
+      padding: 12px 12px 70px;
+    }
+
+    .about-visual {
+      min-height: 440px;
+      padding: 55px 20px;
+      border-radius: 18px;
+    }
+
+    .about-visual h1 {
+      font-size: clamp(30px, 7.5vw, 42px);
+    }
+
+    .about-visual__contenido > p {
+      margin: 20px auto 26px;
+      font-size: 14px;
+    }
+
+    .about-info {
+      padding: 80px 8px 65px;
+    }
+
+    .about-info__cabecera {
+      margin-bottom: 35px;
+    }
+
+    .about-info__rejilla {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .about-info__bloque {
+      min-height: auto;
+      padding: 30px 26px;
+    }
+
+    .about-info__superior {
+      margin-bottom: 30px;
+    }
+
+    .about-equipo {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      padding: 55px 8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-info__bloque,
+    .about-visual__enlace,
+    .about-equipo__boton {
+      transition: none;
+    }
+  }
+</style>
