@@ -6,7 +6,7 @@ autores: [giulio-consoli]
 fecha: 2026-10-28
 temas: [sociedad]
 portada: "/oct7.png"
-borrador: false
+borrador: true
 idioma: es
 figura:
   src: "/oct7.png"

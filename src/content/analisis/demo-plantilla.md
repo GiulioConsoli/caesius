@@ -4,6 +4,7 @@ sumario: "Esta página existe sólo para comprobar la plantilla antes del primer
 autores: [giulio-consoli]
 fecha: 2026-10-26
 noindex: true
+borrador: true
 temas: [elecciones]
 figura:
   src: /figuras/demo/serie.svg

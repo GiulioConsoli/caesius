@@ -6,7 +6,7 @@ autores: [ana-garcia]
 fecha: 2026-10-29
 temas: [sociedad]
 portada: "/oct6.png"
-borrador: false
+borrador: true
 idioma: es
 figura:
   src: "/oct6.png"
