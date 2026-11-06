@@ -6,7 +6,7 @@ autores: [giulio-consoli]
 fecha: 2026-10-27
 temas: [elecciones, internacional]
 portada: "/oct8.png"
-borrador: false
+borrador: true
 idioma: es
 figura:
   src: "/oct8.png"
